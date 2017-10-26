@@ -1,28 +1,26 @@
 {% extends "base.html" %}
-
-{% block content %}
-
-
-
-
-<!--{% for blog in post %}
-<p><u><h2><a href="/singlepost" >{{blog.name}}</a></h2></u></p>
-<p>{{blog.entry}}</p>
     
-    {% endfor %}-->
-
-<!--{% for blog in post %}
-<a href= '@string.Format("http://127.0.0.1:500/singlepost?id={0}", blog.id)'>{{blog.name}}</a>
-<p>{{blog.entry}}</p>
+    {% block content %}
     
-    {% endfor %}-->
+    
+        {% if posts|length == 0 %}
+    
+            <p>No posts yet</p>
+        
+        {% else %}
+    
+            {% for post in posts %}
+                <hr />
+                    <h3><a href='/blog?id={{post.id}}'>{{post.name}}</a></h3>
+                    <p>{{post.entry}}</p>
+                    <p>written by <a href="/blog?userid={{post.owner_id}}">{{ post.owner.username }}</a></p>
+            {% endfor %}
+    
+        {% endif %}
 
-
-{% for blog in post %}
-<h1><a href= "{{ url_for('single_post', id=blog.id) }}">{{blog.name}}</a></h1>
-<h2><p>{{blog.entry}}</p></h2>
-<hr />    
-    {% endfor %}
+    
+    
+    
 
 {% endblock %}
 

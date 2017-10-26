@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Blogz</h1>
+
+    {% if posts|length == 0 %}
+
+        <p>No such post</p>
+    
+    {% else %}
+
+        {% for post in posts %}
+            <hr />
+                <h3><a href="/blog?id={{post.id}}">{{ post.name }}</a></h3>
+                <p>{{ post.entry }}</p>
+
+                <p>written by <a href="/blog?userid={{post.owner_id}}">{{ post.owner.username }}</a></p>
+        {% endfor %}
+
+
+    {% endif %}
+{% endblock %}
