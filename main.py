@@ -37,11 +37,11 @@ class User(db.Model):
         self.password = password
 
 
-@app.before_request
+"""@app.before_request
 def require_login():
     allowed_routes = ['login', 'blog', 'index', 'signup', 'newpost']
     if request.endpoint not in allowed_routes and 'username' not in session:
-        return redirect('/login')
+        return redirect('/login')"""
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -125,7 +125,7 @@ def index():
     posts = User.query.all()
     return render_template('index.html', posts=posts)
 
-    #return redirect('/blog')
+    
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def add_entry():
@@ -177,9 +177,7 @@ def add_entry():
 @app.route('/blog')
 def blog_page():
     
-   # post = Blog.query.all()
-        
-    #return render_template('blog.html', post=post)   
+   
 
     blog_id = request.args.get('id')
     user_id = request.args.get('userid')
@@ -189,7 +187,7 @@ def blog_page():
 
     if blog_id:
         posts = Blog.query.filter_by(id=int(blog_id)).all()
-        return render_template('blog.html', posts=posts)
+        return render_template('ind_blog.html', posts=posts)
 
     if user_id:
         posts = Blog.query.filter_by(owner_id=int(user_id)).all()
@@ -199,27 +197,12 @@ def blog_page():
 
         
 
-    #if blog_id:
-    #    posts = Blog.query.filter_by(id=int(blog_id)).all()
-    #elif user_id:
-    #    posts = Blog.query.filter_by(owner_id=int(user_id)).all()
-    #else:
-    #    posts = Blog.query.order_by(Blog.id.desc()).all()
 
     return render_template('blog.html', posts=posts)
 
 
 
    
-#@app.route('/singlepost')
-#def single_post():
-    
-    
-#    id_name = request.args.get("id")
-
-#    posts = Blog.query.filter_by(id=id_name).all()
-        
-#    return render_template('ind_blog.html', posts=posts)
 
 
 @app.route('/logout')
