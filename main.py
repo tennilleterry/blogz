@@ -43,22 +43,13 @@ def require_login():
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')"""
 
+@app.route('/')
+def index():
+    posts = User.query.all()
+    return render_template('index.html', posts=posts)
 
-@app.route('/login', methods=['POST', 'GET'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
 
-        if user and user.password == password:
-            session["username"] = username
-            return redirect('/newpost')
 
-        else:
-            return render_template('login.html', username_error="Username does not exist.")
-
-    return render_template('login.html')
 
 
 
@@ -120,12 +111,52 @@ def signup():
 
 
 
-@app.route('/')
-def index():
-    posts = User.query.all()
-    return render_template('index.html', posts=posts)
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+
+        if user and user.password == password:
+            session["username"] = username
+            return redirect('/newpost')
+
+        else:
+            return render_template('login.html', username_error="Username does not exist.")
+
+    return render_template('login.html')
 
     
+
+
+
+@app.route('/blog')
+def blog_page():
+    
+   
+
+    blog_id = request.args.get('id')
+    user_id = request.args.get('userid')
+
+    posts = Blog.query.order_by(Blog.id.desc()).all()
+
+
+    if blog_id:
+        posts = Blog.query.filter_by(id=int(blog_id)).all()
+        return render_template('ind_blog.html', posts=posts)
+
+    if user_id:
+        posts = Blog.query.filter_by(owner_id=int(user_id)).all()
+        return render_template('singleUser.html', posts=posts)
+    
+    
+
+        
+
+
+    return render_template('blog.html', posts=posts)
+
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def add_entry():
@@ -173,35 +204,6 @@ def add_entry():
         
     return render_template('newpost.html')
     
-
-@app.route('/blog')
-def blog_page():
-    
-   
-
-    blog_id = request.args.get('id')
-    user_id = request.args.get('userid')
-
-    posts = Blog.query.order_by(Blog.id.desc()).all()
-
-
-    if blog_id:
-        posts = Blog.query.filter_by(id=int(blog_id)).all()
-        return render_template('ind_blog.html', posts=posts)
-
-    if user_id:
-        posts = Blog.query.filter_by(owner_id=int(user_id)).all()
-        return render_template('singleUser.html', posts=posts)
-    
-    
-
-        
-
-
-    return render_template('blog.html', posts=posts)
-
-
-
    
 
 
